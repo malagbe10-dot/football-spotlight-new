@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Ligue des champions UEFA",
+    "category": "Masculin"
+  },
+  {
+    "name": "UEFA Women's Champions League",
+    "category": "Féminin"
+  },
+  {
+    "name": "Europa League",
+    "category": "Masculin"
+  },
+  {
+    "name": "Coupe d'Afrique des nations",
+    "category": "Sélections"
+  },
+  {
+    "name": "Coupe du monde",
+    "category": "Masculin et féminin"
+  }
+]
