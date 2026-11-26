@@ -1,37 +1,56 @@
-const matches = [
-  {competition:"Ligue des champions", gender:"men", home:"Real Madrid", away:"Manchester City", score:"— : —", status:"À VENIR", date:"Exemple • 20:00"},
-  {competition:"UWCL", gender:"women", home:"FC Barcelona", away:"Chelsea", score:"— : —", status:"À VENIR", date:"Exemple • 18:45"},
-  {competition:"Premier League", gender:"men", home:"Arsenal", away:"Liverpool", score:"2 : 1", status:"TERMINÉ", date:"Exemple • Résultat fictif"},
-  {competition:"D1 Arkema", gender:"women", home:"OL Lyonnes", away:"PSG", score:"1 : 1", status:"TERMINÉ", date:"Exemple • Résultat fictif"},
-  {competition:"Serie A", gender:"men", home:"Inter", away:"Juventus", score:"— : —", status:"À VENIR", date:"Exemple • 20:45"},
-  {competition:"NWSL", gender:"women", home:"Orlando Pride", away:"Gotham FC", score:"— : —", status:"À VENIR", date:"Exemple • 19:00"}
-];
-const news = [
-  {category:"FOOTBALL MONDIAL",title:"Toute l'actualité du ballon rond au même endroit",body:"Retrouvez les informations importantes des clubs, sélections et compétitions du monde entier."},
-  {category:"FOOTBALL FÉMININ",title:"Le football féminin au premier plan",body:"Suivez les équipes, joueuses, résultats et grandes affiches des compétitions féminines."},
-  {category:"ANALYSE",title:"Comprendre ce qui se passe sur le terrain",body:"Tactique, statistiques et moments décisifs : le score ne raconte pas toujours toute l'histoire."}
-];
-const competitions = [
-  ["UEFA","Ligue des champions"],["UEFA","Europa League"],["UEFA","Conference League"],["UEFA","UWCL"],
-  ["AFRIQUE","CAN & compétitions CAF"],["MONDE","Coupe du monde"],["NATIONAL","Championnats nationaux"],["FÉMININ","Ligues féminines"]
-];
-const matchGrid = document.querySelector("#matchGrid");
-function renderMatches(filter="all"){
-  matchGrid.innerHTML = matches.filter(m=>filter==="all"||m.gender===filter).map(m=>`
-    <article class="match-card">
-      <div class="match-meta"><span>${m.competition}</span><span class="match-status">${m.status}</span></div>
-      <div class="teams"><div class="team">${m.home}<small>${m.gender==="women"?"Féminin":"Masculin"}</small></div><div class="score">${m.score}</div><div class="team">${m.away}<small>${m.date}</small></div></div>
-    </article>`).join("");
+const DATA_URL = "data/live.json";
+let allMatches = [];
+let currentFilter = "all";
+
+function statusType(m) {
+  const s = (m.status || "").toUpperCase();
+  if (["1H","2H","HT","ET","P","LIVE","INT"].includes(s)) return "live";
+  if (["FT","AET","PEN"].includes(s)) return "finished";
+  return "scheduled";
 }
-renderMatches();
-document.querySelectorAll(".filter").forEach(btn=>btn.addEventListener("click",()=>{
-  document.querySelectorAll(".filter").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");renderMatches(btn.dataset.filter);
+function safe(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function render() {
+  const live = allMatches.filter(m => statusType(m) === "live").length;
+  const finished = allMatches.filter(m => statusType(m) === "finished").length;
+  document.getElementById("total").textContent = allMatches.length;
+  document.getElementById("live-count").textContent = live;
+  document.getElementById("finished-count").textContent = finished;
+  const shown = allMatches.filter(m => currentFilter === "all" || statusType(m) === currentFilter);
+  const container = document.getElementById("matches");
+  if (!shown.length) {
+    container.innerHTML = '<div class="empty">Aucun match dans cette catégorie pour le moment.</div>';
+    return;
+  }
+  container.innerHTML = shown.map(m => {
+    const type = statusType(m);
+    const badge = type === "live" ? "EN DIRECT" : type === "finished" ? "TERMINÉ" : "À VENIR";
+    const score = m.home_goals === null || m.away_goals === null ? "— : —" : `${m.home_goals} : ${m.away_goals}`;
+    return `<article class="match">
+      <div class="match-top"><span class="league">${safe(m.league)}</span><span>${safe(m.country || "")}</span></div>
+      <div class="teams"><div class="team">${safe(m.home)}</div><div class="score">${score}</div><div class="team away">${safe(m.away)}</div></div>
+      <div class="meta"><span>${safe(m.kickoff || "")}</span><span class="badge ${type}">${badge}${m.elapsed ? " · "+safe(m.elapsed)+"′" : ""}</span></div>
+    </article>`;
+  }).join("");
+}
+async function loadData() {
+  try {
+    const response = await fetch(`${DATA_URL}?t=${Date.now()}`, {cache:"no-store"});
+    if (!response.ok) throw new Error("Fichier de données indisponible");
+    const data = await response.json();
+    allMatches = data.matches || [];
+    document.getElementById("updated").textContent = data.updated_at ? `Dernière mise à jour : ${new Date(data.updated_at).toLocaleString("fr-FR")}` : "";
+    render();
+  } catch (error) {
+    document.getElementById("matches").innerHTML = '<div class="empty">Les données seront disponibles après la première exécution automatique du robot.</div>';
+  }
+}
+document.querySelectorAll(".filter").forEach(button => button.addEventListener("click", () => {
+  document.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
+  button.classList.add("active");
+  currentFilter = button.dataset.filter;
+  render();
 }));
-document.querySelector("#newsGrid").innerHTML = news.map(n=>`
-  <article class="news-card"><div><span class="news-category">${n.category}</span><h3>${n.title}</h3><p>${n.body}</p></div><a href="#analyses">EN SAVOIR PLUS ↗</a></article>`).join("");
-document.querySelector("#competitionGrid").innerHTML = competitions.map(c=>`
-  <article class="competition"><span>${c[0]}</span><h3>${c[1]}</h3></article>`).join("");
-document.querySelector("#year").textContent = new Date().getFullYear();
-document.querySelector("#menuToggle").addEventListener("click",()=>document.querySelector("#mainNav").classList.toggle("open"));
-document.querySelectorAll("#mainNav a").forEach(a=>a.addEventListener("click",()=>document.querySelector("#mainNav").classList.remove("open")));
+loadData();
+setInterval(loadData, 5 * 60 * 1000);

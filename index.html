@@ -3,92 +3,53 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07140f">
-  <meta name="description" content="Football Spotlight — actualités, résultats, compétitions et analyses du football mondial.">
-  <title>Football Spotlight | Le football sous les projecteurs</title>
+  <meta name="theme-color" content="#07130f">
+  <meta name="description" content="Football Spotlight — scores, résultats et actualités du football mondial.">
+  <title>FOOTBALL SPOTLIGHT</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#" aria-label="Football Spotlight accueil">
-      <span class="brand-mark">FS</span><span>FOOTBALL <b>SPOTLIGHT</b></span>
-    </a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu">☰</button>
-    <nav id="mainNav">
-      <a href="#accueil" class="active">Accueil</a>
-      <a href="#direct">En direct</a>
-      <a href="#actualites">Actualités</a>
-      <a href="#competitions">Compétitions</a>
-      <a href="#analyses">Analyses</a>
-    </nav>
-    <span class="live-pill"><i></i> FOOTBALL MONDIAL</span>
+  <header class="hero">
+    <div class="brand-mark">⚽</div>
+    <div>
+      <p class="eyebrow">LE FOOTBALL, EN DIRECT</p>
+      <h1>FOOTBALL <span>SPOTLIGHT</span></h1>
+      <p class="subtitle">Le monde du football au même endroit.</p>
+    </div>
   </header>
 
   <main>
-    <section class="hero" id="accueil">
-      <div class="hero-content">
-        <p class="eyebrow">LE MONDE DU FOOTBALL, EN UN SEUL ENDROIT</p>
-        <h1>Le football<br><em>sous les projecteurs.</em></h1>
-        <p class="hero-copy">Résultats, actualités, compétitions et analyses du football masculin et féminin partout dans le monde.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="#direct">Voir les matchs</a>
-          <a class="button secondary" href="#actualites">Explorer l'actualité</a>
-        </div>
-      </div>
-      <div class="hero-art" aria-hidden="true">
-        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
-        <div class="ball">⚽</div><div class="hero-tag">90' <span>+ LE FOOT</span></div>
-      </div>
-    </section>
-
-    <section class="ticker" aria-label="Bandeau d'information">
-      <span class="ticker-label">SPOTLIGHT</span>
-      <div>Le football masculin et féminin mérite la même lumière. Suivez les grandes compétitions du monde entier.</div>
-    </section>
-
-    <section class="section" id="direct">
-      <div class="section-heading">
-        <div><p class="eyebrow">SUIVEZ L'ACTION</p><h2>Matchs & résultats</h2></div>
-        <span class="section-note">Données de démonstration</span>
-      </div>
-      <div class="filters" id="matchFilters">
-        <button class="filter active" data-filter="all">Tous</button>
-        <button class="filter" data-filter="men">Masculin</button>
-        <button class="filter" data-filter="women">Féminin</button>
-      </div>
-      <div class="match-grid" id="matchGrid"></div>
-      <p class="data-note">Les rencontres affichées sont des exemples de présentation. Connectez une API de scores pour obtenir les matchs et résultats réels.</p>
-    </section>
-
-    <section class="section news-section" id="actualites">
-      <div class="section-heading">
-        <div><p class="eyebrow">À LA UNE</p><h2>Dernières actualités</h2></div>
-        <span class="section-note">Le regard Football Spotlight</span>
-      </div>
-      <div class="news-grid" id="newsGrid"></div>
-    </section>
-
-    <section class="section competitions-section" id="competitions">
-      <div class="section-heading">
-        <div><p class="eyebrow">TOUTES LES SCÈNES</p><h2>Compétitions à suivre</h2></div>
-      </div>
-      <div class="competition-grid" id="competitionGrid"></div>
-    </section>
-
-    <section class="analysis-banner" id="analyses">
+    <section class="toolbar">
       <div>
-        <p class="eyebrow">AU-DELÀ DU SCORE</p>
-        <h2>Football Autopsie</h2>
-        <p>Décrypter les matchs : tactique, temps forts, choix des entraîneurs et moments décisifs.</p>
+        <p class="eyebrow">CENTRE DU MATCH</p>
+        <h2>Scores & résultats</h2>
       </div>
-      <a class="button primary" href="mailto:contact@footballspotlight.example?subject=Football%20Autopsie">Proposer une analyse</a>
+      <div class="status"><span class="pulse"></span> Données actualisées automatiquement</div>
     </section>
+
+    <section class="filters" aria-label="Filtres">
+      <button class="filter active" data-filter="all">Tous</button>
+      <button class="filter" data-filter="live">En direct</button>
+      <button class="filter" data-filter="finished">Terminés</button>
+      <button class="filter" data-filter="scheduled">À venir</button>
+    </section>
+
+    <section id="summary" class="summary-grid">
+      <article class="summary-card"><span>Matchs</span><strong id="total">—</strong></article>
+      <article class="summary-card"><span>En direct</span><strong id="live-count">—</strong></article>
+      <article class="summary-card"><span>Terminés</span><strong id="finished-count">—</strong></article>
+    </section>
+
+    <section id="matches" class="matches-grid" aria-live="polite">
+      <div class="loading">Chargement des rencontres…</div>
+    </section>
+
+    <p class="updated" id="updated"></p>
   </main>
 
   <footer>
-    <a class="brand" href="#"><span class="brand-mark">FS</span><span>FOOTBALL <b>SPOTLIGHT</b></span></a>
-    <p>Le football du monde entier, masculin et féminin.</p>
-    <small>© <span id="year"></span> Football Spotlight. Projet indépendant.</small>
+    <strong>FOOTBALL SPOTLIGHT</strong>
+    <span>Les données de matchs sont fournies par API-Football.</span>
   </footer>
   <script src="script.js"></script>
 </body>

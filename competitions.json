@@ -1,22 +1,60 @@
-[
-  {
-    "name": "Ligue des champions UEFA",
-    "category": "Masculin"
-  },
-  {
-    "name": "UEFA Women's Champions League",
-    "category": "Féminin"
-  },
-  {
-    "name": "Europa League",
-    "category": "Masculin"
-  },
-  {
-    "name": "Coupe d'Afrique des nations",
-    "category": "Sélections"
-  },
-  {
-    "name": "Coupe du monde",
-    "category": "Masculin et féminin"
-  }
-]
+{
+  "description": "Compétitions suivies par FOOTBALL SPOTLIGHT. Les IDs sont des identifiants API-Football.",
+  "leagues": [
+    {
+      "id": 2,
+      "name": "UEFA Champions League",
+      "gender": "men"
+    },
+    {
+      "id": 3,
+      "name": "UEFA Europa League",
+      "gender": "men"
+    },
+    {
+      "id": 848,
+      "name": "UEFA Women's Champions League",
+      "gender": "women"
+    },
+    {
+      "id": 1,
+      "name": "FIFA World Cup",
+      "gender": "men"
+    },
+    {
+      "id": 4,
+      "name": "UEFA European Championship",
+      "gender": "men"
+    },
+    {
+      "id": 39,
+      "name": "Premier League",
+      "gender": "men"
+    },
+    {
+      "id": 140,
+      "name": "La Liga",
+      "gender": "men"
+    },
+    {
+      "id": 135,
+      "name": "Serie A",
+      "gender": "men"
+    },
+    {
+      "id": 78,
+      "name": "Bundesliga",
+      "gender": "men"
+    },
+    {
+      "id": 61,
+      "name": "Ligue 1",
+      "gender": "men"
+    },
+    {
+      "id": 307,
+      "name": "Saudi Pro League",
+      "gender": "men"
+    }
+  ]
+}
